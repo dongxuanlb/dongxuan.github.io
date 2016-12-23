@@ -98,7 +98,7 @@
 <meta property="og:description" content="前记话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.
 日志出不来准确说, 是我新搭的SpringMVC应用的Spring框架日志出不来. 而应用程序中使用slf4j可以正常打印.
 我的日志使用的是logback. 引用的包也是国际标准姿势.">
-<meta property="og:updated_time" content="2016-12-23T15:10:31.000Z">
+<meta property="og:updated_time" content="2016-12-23T15:15:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Log蛋疼记">
 <meta name="twitter:description" content="前记话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.
@@ -369,7 +369,7 @@
 <li>jcl-over-slf4j通过使用commons-logging的寻找机制, 将日志实现委托给了slf4j框架, slf4j后续使用其自身机制, 确认使用logback, log4j, log4j2等实际的日志实现组件.</li>
 </ol>
 <h1 id="坑爹的冒牌货"><a href="#坑爹的冒牌货" class="headerlink" title="坑爹的冒牌货"></a>坑爹的冒牌货</h1><p>回到最开始的问题, 博主我一开始也确认检查过工程中包含了jcl-over-slf4j的jar的, 但日志还是出不来.</p>
-<p>真正的罪魁祸首是另一个在META-INF/services目录下提供了org.apache.commons.logging.LogFactory文件的jar包: toolkit-common-logging, 一个坑过无数阿里同时的二方包!!! 他的内容是: com.alibaba.common.logging.spi.GenericLoggerFactory. 然后只有log4j和jdklog.</p>
+<p>真正的罪魁祸首是另一个在META-INF/services目录下提供了org.apache.commons.logging.LogFactory文件的jar包: toolkit-common-logging, 一个坑过无数阿里同学的二方包! 他的内容是: com.alibaba.common.logging.spi.GenericLoggerFactory. 然后只有log4j和jdklog实现.</p>
 
       
     </div>
