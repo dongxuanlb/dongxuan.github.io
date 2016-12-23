@@ -90,23 +90,20 @@
 
 <meta name="description" content="前记话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.
 日志出不来准确说, 是我新搭的SpringMVC应用的Spring框架日志出不来. 而应用程序中使用slf4j可以正常打印.
-我的日志使用的是logback. 引用的包也是国际标准姿势.
-12345678910111213141516&amp;lt;!-- 日志相关, 整个系统使用logback --&amp;gt;&amp;lt;depend">
+我的日志使用的是logback. 引用的包也是国际标准姿势.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Log蛋疼记">
 <meta property="og:url" content="http://dongxuan.me/2016/12/23/Log蛋疼记/index.html">
 <meta property="og:site_name" content="洞玄的博客">
 <meta property="og:description" content="前记话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.
 日志出不来准确说, 是我新搭的SpringMVC应用的Spring框架日志出不来. 而应用程序中使用slf4j可以正常打印.
-我的日志使用的是logback. 引用的包也是国际标准姿势.
-12345678910111213141516&amp;lt;!-- 日志相关, 整个系统使用logback --&amp;gt;&amp;lt;depend">
-<meta property="og:updated_time" content="2016-12-23T15:04:06.000Z">
+我的日志使用的是logback. 引用的包也是国际标准姿势.">
+<meta property="og:updated_time" content="2016-12-23T15:10:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Log蛋疼记">
 <meta name="twitter:description" content="前记话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.
 日志出不来准确说, 是我新搭的SpringMVC应用的Spring框架日志出不来. 而应用程序中使用slf4j可以正常打印.
-我的日志使用的是logback. 引用的包也是国际标准姿势.
-12345678910111213141516&amp;lt;!-- 日志相关, 整个系统使用logback --&amp;gt;&amp;lt;depend">
+我的日志使用的是logback. 引用的包也是国际标准姿势.">
 
 
 
@@ -351,6 +348,7 @@
         <h1 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h1><p>话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.</p>
 <h1 id="日志出不来"><a href="#日志出不来" class="headerlink" title="日志出不来"></a>日志出不来</h1><p>准确说, 是我新搭的SpringMVC应用的Spring框架日志出不来. 而应用程序中使用slf4j可以正常打印.</p>
 <p>我的日志使用的是logback. 引用的包也是国际标准姿势.</p>
+<a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 日志相关, 整个系统使用logback --&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.slf4j&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.7.22&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;logback-core&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.1.3&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.1.3&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
 <p>至于logback.xml, 因为日志文件能够正常创建, 我自己代码中的日志也能正常输出, 所以不会有问题.</p>
 <h1 id="是logback与spring不兼容吗"><a href="#是logback与spring不兼容吗" class="headerlink" title="是logback与spring不兼容吗?"></a>是logback与spring不兼容吗?</h1><p>从表面看, 不是logback, 也不是spring(4.2.5)的问题, 那就是组合起来有问题? 但实际上我另外一个工程就是spring+logback, 没啥问题. 另外slf4j和logback是一家人, 他们之间也应该不会有什么问题.</p>

@@ -344,33 +344,16 @@
 
       
         
-          
-            <h1 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h1><p>话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.</p>
+          <h1 id="前记"><a href="#前记" class="headerlink" title="前记"></a>前记</h1><p>话说码农总有几个过不去的砍: 乱码和日志. 这篇文章记录一下蛋疼的日志.</p>
 <h1 id="日志出不来"><a href="#日志出不来" class="headerlink" title="日志出不来"></a>日志出不来</h1><p>准确说, 是我新搭的SpringMVC应用的Spring框架日志出不来. 而应用程序中使用slf4j可以正常打印.</p>
 <p>我的日志使用的是logback. 引用的包也是国际标准姿势.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 日志相关, 整个系统使用logback --&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.slf4j&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.7.22&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;logback-core&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.1.3&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.1.3&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
-<p>至于logback.xml, 因为日志文件能够正常创建, 我自己代码中的日志也能正常输出, 所以不会有问题.</p>
-<h1 id="是logback与spring不兼容吗"><a href="#是logback与spring不兼容吗" class="headerlink" title="是logback与spring不兼容吗?"></a>是logback与spring不兼容吗?</h1><p>从表面看, 不是logback, 也不是spring(4.2.5)的问题, 那就是组合起来有问题? 但实际上我另外一个工程就是spring+logback, 没啥问题. 另外slf4j和logback是一家人, 他们之间也应该不会有什么问题.</p>
-<p>所以, 只能源码走起.</p>
-<h1 id="Spring主要使用的commons-logging"><a href="#Spring主要使用的commons-logging" class="headerlink" title="Spring主要使用的commons-logging"></a>Spring主要使用的commons-logging</h1><p>从ContextLoader#initWebApplicationContext方法进去, 一开始就是一段获得Log的方法调用.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Log logger = LogFactory.getLog(ContextLoader.class);</div></pre></td></tr></table></figure>
-<p>而其中LogFactory#getLog方法内部的核心是getFactory().</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Log <span class="title">getLog</span><span class="params">(Class clazz)</span> <span class="keyword">throws</span> LogConfigurationException </span>&#123;</div><div class="line">   <span class="keyword">return</span> getFactory().getInstance(clazz);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="commons-logging是如何选择Factory的实现类的"><a href="#commons-logging是如何选择Factory的实现类的" class="headerlink" title="commons-logging是如何选择Factory的实现类的"></a>commons-logging是如何选择Factory的实现类的</h1><p>这个方法实现不复杂, 结论就是:</p>
-<ol>
-<li>优先从classloader中load路径名称为<em>META-INF/services/org.apache.commons.logging.LogFactory</em>的文件内容. 该文件内容就是factoryClassName.</li>
-<li>如果没有找到, 则使用默认的org.apache.commons.logging.impl.LogFactoryImpl作为Factory. 这个Factory支持Log4J, Jdk14及SimpleLog.</li>
-</ol>
-<p>这样看来, 如果想要使用logback, 是不可能走第二条路了.</p>
-<h1 id="jcl-over-slf4j"><a href="#jcl-over-slf4j" class="headerlink" title="jcl-over-slf4j"></a>jcl-over-slf4j</h1><p>这货看名字就知道是commons-logging和slf4j的桥梁. 所以现在比较清楚了.</p>
-<ol>
-<li>commons-logging本身不具备日志能力, 他会通过2种机制去寻找实际的日志实现者.</li>
-<li>jcl-over-slf4j通过使用commons-logging的寻找机制, 将日志实现委托给了slf4j框架, slf4j后续使用其自身机制, 确认使用logback, log4j, log4j2等实际的日志实现组件.</li>
-</ol>
-<h1 id="坑爹的冒牌货"><a href="#坑爹的冒牌货" class="headerlink" title="坑爹的冒牌货"></a>坑爹的冒牌货</h1><p>回到最开始的问题, 博主我一开始也确认检查过工程中包含了jcl-over-slf4j的jar的, 但日志还是出不来.</p>
-<p>真正的罪魁祸首是另一个在META-INF/services目录下提供了org.apache.commons.logging.LogFactory文件的jar包: toolkit-common-logging, 一个坑过无数阿里同时的二方包!!! 他的内容是: com.alibaba.common.logging.spi.GenericLoggerFactory. 然后只有log4j和jdklog.</p>
-
-          
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/12/23/Log蛋疼记/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
